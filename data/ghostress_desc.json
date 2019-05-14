@@ -1,0 +1,17 @@
+{
+    "fields": [
+        {
+            "name": "name",
+            "type": "string",
+            "generate": true
+        },
+        {
+            "name": "age",
+            "type": "int",
+            "generate": true
+        }
+    ],
+    "format": {
+        "shape": "object"
+    }
+}

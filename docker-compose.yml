@@ -1,0 +1,44 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  golang:
+    build: go-ghostress-test
+    restart: always
+    links:
+      - "postgresql:db"
+    ports:
+      - "1323:1323"
+    expose:
+      - "1323"
+    depends_on:
+      - postgresql
+
+  nestjs:
+    image: "node:alpine"
+    working_dir: /home/node/app
+    restart: always
+    volumes:
+      - ./ts-ghostress-test:/home/node/app
+    links:
+      - "postgresql:db"
+    ports:
+      - "3001:3000"
+    expose:
+      - "3001"
+    command: "npm start"
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: ghostress_test
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+      - ./postgresql/db.sql:/docker-entrypoint-initdb.d/db.sql
